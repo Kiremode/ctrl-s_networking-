@@ -1,7 +1,6 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Numerics;
 
 
 namespace Network_Labyrinth.Classes;
@@ -21,8 +20,8 @@ public class WallFollow
     
     /*
      *Prüfen oben, links, unten rechts
-     * gehen in eine freie richtung ( nach den oben genanten muster)
-     * wenn an eine wand stoßen wieder prüfen wo man hinn kann mit ausname von da wo man herkommt,
+     * gehen in eine freie richtung (nach den oben genannten muster)
+     * wenn an eine Wand stoßen wieder prüfen, wo man hinn kann mit ausname von da wo man herkommt,
      * wenn sackgasse jeden schritt neu prüfen und andere richtung einschlagen
      * 
      */
@@ -38,8 +37,6 @@ public class WallFollow
             //kann hin gehen 
             resetMoveDir = false;
             
-            
-            //Console.WriteLine("last dir test owo test: " +lastDir);
         }
         else
         {
@@ -131,43 +128,5 @@ public class WallFollow
         
         
         Console.WriteLine(directionString);
-    }
-
-    
-    
-    static Vector2 GetPlayerPos(string map)
-    {
-        Vector2 clensedPlayerPos = Vector2.Zero;
-        
-        Console.WriteLine(map);
-
-        var s = map.Split('\n')[1];
-   
-        // -5 man zieht die start pos ab und löscht die letzten beiden charactere ] >
-        s =s.Substring(3, s.Length  -5);
-
-
-        int x = 0;
-        int y = 0;
-        string[] relativeCleanPlayerPosString = s.Split(";");
-        string num = "";
-        foreach (var wario in relativeCleanPlayerPosString)
-        {
-            
-            if (wario.Contains("X"))
-            {
-                num =wario.Substring(2, wario.Length -2);
-                clensedPlayerPos.X = Int32.Parse(num);
-            }
-            if (wario.Contains("Y"))
-            {
-                
-                num =wario.Substring(2, wario.Length -2);
-                clensedPlayerPos.Y = Int32.Parse(num);
-            }
-                
-        }
-        
-        return clensedPlayerPos;
     }
 }

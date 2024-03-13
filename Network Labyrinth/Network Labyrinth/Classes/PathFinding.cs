@@ -193,19 +193,7 @@ public class PathFinding
         }
 
     }
-    
-    /*
-     *T
-     *WW
-     *  WW WWW WW
-     *WW        W
-     *  XWWWWWWWWW
-     *
-     *
-     * 
-     */
-
-    
+   
     static void MoveThePlayer(Socket socket, string directionString, int backTrackInt, Vector2 PlayerPos)
     {
 
@@ -232,7 +220,6 @@ public class PathFinding
         
         Setup.SendData(socket, directionString);
         
-        //move.Add(0);
         backTrack.Add(backTrackInt);
         Console.WriteLine(directionString);
     }
@@ -245,15 +232,10 @@ public class PathFinding
 
         var s = map.Split('\n')[1];
         
-        //build a  substing to get rid of the 9 
-        //string neinLessS 
-        //WTF -5 da man die länge der Charactere  die man in den substing haben will und nicht den index bei den man aufhören will WTF!!!!
+        //build a substing to get rid of the 9 
         // und die 3 da man ja die [] loswerden will 
         // -5 man zieht die start pos ab und löscht die letzten beiden charactere ] >
         s =s.Substring(3, s.Length  -5);
-        
-        //lösche die letzte klammer  und das  >
-        //s =s.Substring(0,  s.Length -2 );
 
         int x = 0;
         int y = 0;
@@ -279,10 +261,4 @@ public class PathFinding
         return clensedPlayerPos;
     }
 
-    public static bool DidWin(bool state)
-    {
-        return state;
-    }
-    
-    
 }

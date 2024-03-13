@@ -14,16 +14,12 @@ public static class Program
 {
     public static void Main()
     {
-        Console.WriteLine("hello world");
         Client();
-        
         Console.ReadKey();
     }
 
     public static void Client()
     {
-        byte[] bytes = new byte[1024];
-
         try
         {
             IPHostEntry host = Dns.GetHostEntry("labyrinth.ctrl-s.de"); //Use the url
@@ -36,11 +32,8 @@ public static class Program
             //connect the socket to the end point
             sender.Connect(ipEndPoint);
             
-            GetMSG(sender, bytes);
-
-            
+            //this function sets up the play  field
             Setup.MapSetup(sender);
-            Thread.Sleep(1000); // this time out is here as a test for the send data ( because it could be that it sends the code to fast ) 
 
             GameRun(sender);
 
@@ -53,8 +46,8 @@ public static class Program
         
     }
 
+    //run the Game.
     static void GameRun(Socket sender){
-        //do while loop solong until the  game is not won
         while (true)
         {
             var map = Setup.SendMap(sender ,"PRINT");
@@ -64,24 +57,5 @@ public static class Program
         } 
     }
     
-    
-    public static void GetMSG(Socket sender, byte[] bytes)
-    {
-        //Console.WriteLine("im in the client");
-        try
-        {
-            //sender.Connect(ipEndPoint);
-            Console.WriteLine("socket is connected  {0}",sender.RemoteEndPoint);//check  if connected
-                
-            //get the responce
-            int byteRecord = sender.Receive(bytes);
-            Console.WriteLine("Rec data {0}", Encoding.ASCII.GetString(bytes,0,byteRecord));
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-    }
 
 }
