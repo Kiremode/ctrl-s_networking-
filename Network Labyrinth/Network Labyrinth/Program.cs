@@ -16,9 +16,7 @@ public static class Program
     {
         Console.WriteLine("hello world");
         Client();
-        //make a while here so that i can remove the while in path  finder
-        // the while will  run until  the end is reached 
-        //  the map will be printed here and be given to the path finder 
+        
         Console.ReadKey();
     }
 
@@ -40,19 +38,12 @@ public static class Program
             
             GetMSG(sender, bytes);
 
+            
+            Setup.MapSetup(sender);
             Thread.Sleep(1000); // this time out is here as a test for the send data ( because it could be that it sends the code to fast ) 
 
-            Setup.MapSetup(sender);
-     
-            int byteRecord = sender.Receive(bytes);
-            
-            var print  = Encoding.ASCII.GetString(bytes, 0, byteRecord);
-            
-            //Console.WriteLine(print);
-            //
-            //File.WriteAllText("hi.txt", print);
+            GameRun(sender);
 
-            PathFinding.Walk(sender);
         }
         catch (Exception e)
         {
@@ -62,22 +53,28 @@ public static class Program
         
     }
 
-    public static string PrintMap(Socket sender, byte[] bytes)
-    {
-        //get  the  map  
-        //remove the first line and the last line so that i get rid of the numbers
-        //remove the first letter in the line to remove the letters  
-        // make a array out of it 
-        int byteRecord = sender.Receive(bytes);
+    static void GameRun(Socket sender){
+        //do while loop solong until the  game is not won
+        while (true)
+        {
+            var map = Setup.SendMap(sender ,"PRINT");
+            //File.WriteAllText("hi.txt", map);
+            Thread.Sleep(1000);
+            //Console.WriteLine("map map " + map +" not map ");
             
-        string print  = Encoding.ASCII.GetString(bytes, 0, byteRecord);
-        return print;
+            //if can not enter tile  add unmove to array 
+            // 2 dim array  [419][490] false false  
+            // anst 0123 -1 1  -1 1
+            
+            PathFinding.Walk(sender, map);
+            Thread.Sleep(1500);
+        } 
     }
     
     
     public static void GetMSG(Socket sender, byte[] bytes)
     {
-        Console.WriteLine("im in the client");
+        //Console.WriteLine("im in the client");
         try
         {
             //sender.Connect(ipEndPoint);
@@ -94,12 +91,4 @@ public static class Program
         }
     }
 
-    static string CleanUpMapInput(string map)
-    {
-        string cleanMap ="";
-        // make a regex script that removes [X:311;Y:132;Z:0]> print T
-        return cleanMap;
-    }
-    
-    
 }

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Network Labyrinth")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e1d96f1bda2ee9dc79e038d73d0ca31d6e89c2ea")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c9edc82f8bcd76ea6232792eb1f65e7845b92b73")]
 [assembly: System.Reflection.AssemblyProductAttribute("Network Labyrinth")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Network Labyrinth")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -6,7 +6,7 @@ namespace Network_Labyrinth.Classes;
 public class Setup
 {
     //this will set the  map the 500x500 and starts the game 
-    public static bool MapSetup(Socket sender)
+    public static void MapSetup(Socket sender)
     {
         // set up the strings for the setup with out the \n it didnt work
         string width = "WIDTH 500";
@@ -26,15 +26,32 @@ public class Setup
         Thread.Sleep(1000);
         SendData(sender, print);
 
-        return true;
     }
 
     
-    public static void SendData(Socket sender, string msg)
+    public static string SendData(Socket sender, string msg)
+    {
+        byte[] bytes = new byte[1024];
+        sender.Send(Encoding.ASCII.GetBytes(msg +" \n"));
+        int byteRecord = sender.Receive(bytes);
+        var recData = Encoding.ASCII.GetString(bytes, 0, byteRecord);
+        
+        Console.WriteLine(recData);
+        return recData;
+    }
+    
+    public static string SendMap(Socket sender, string msg)
     {
         byte[] bytes = new byte[1024];
         sender.Send(Encoding.ASCII.GetBytes(msg +"\n"));
         int byteRecord = sender.Receive(bytes);
-        Console.WriteLine("Rec data {0}", Encoding.ASCII.GetString(bytes,0,byteRecord));
+        var recData = Encoding.ASCII.GetString(bytes, 0, byteRecord);
+        
+        Console.WriteLine("owo rec data" +recData + "asdeasdasdasd");
+
+        //PathFinding.ClencingMap(recData);
+        
+        return recData;
     }
+    
 }
