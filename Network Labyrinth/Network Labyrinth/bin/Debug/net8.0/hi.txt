@@ -1,13 +1,2 @@
-3 366x382x0.
-4   W  W WW  
-4    W    WWW
-4   W       W
-4   W  WW   W
-4  WWWWWW  WW
-4 W WWWPW  W 
-4     W W W  
-4   W W   W W
-4 W W  WW W W
-4 W  WWW W WW
-4     WWW WW 
-9 [X:366;Y:382;Z:0]>
+2 DONE.
+9 [X:492;Y:312;Z:0]>
