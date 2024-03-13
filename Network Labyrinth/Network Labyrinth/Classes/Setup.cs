@@ -10,8 +10,8 @@ public class Setup
     {
         // set up the strings for the setup with out the \n it didnt work
         //TODO THIS NEEDS TO BE CHANGED BACK TO 512X512
-        string width = "WIDTH 32";
-        string height  = "HEIGHT 32";
+        string width = "WIDTH 500";
+        string height  = "HEIGHT 500";
         string depth = "DEPTH 1";
         string start = "START";
         string print = "Print";
