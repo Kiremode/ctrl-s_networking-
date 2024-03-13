@@ -19,13 +19,25 @@ public class PathFinding
      * ]
      * 
      */
-    static int[,] map = new int[512,512];
+    //TODO THIS NEEDS TO BE CHANGED BACK TO 512X512
+    static bool[,] hasBeenVisitet = new bool[32,32];
     private static int YPos = 0;
     private static int XPos = 0;
 
     //saves  the walked way so that it can backtrack
-    private static List<string> move;
-    private static List<string> backTrack;
+    private static List<int> move = new List<int>();
+    private static List<int> backTrack = new List<int>();
+    
+    
+    
+    /*
+     *
+     * list bla <left, left, lef>
+     * <left, left, left,right, up, > 
+     * 
+     */
+
+    
     
     private static bool isFirstMove = true;
     
@@ -39,16 +51,11 @@ public class PathFinding
     
     
     /*
-     *
-     *
      * DFS mit der liste um die bewegungen einzuspeichern in die move liste  also z.b. wenn man nach links läuft wird links eingetragen und das gegenteil wird in backtrack eingespeichert
      * das map array in einen bool um zu checken ob wir da schon mal waren **A
      * dann  wenn man backtrackt in die 3 anderen richtungen schauen und dann die abzweigung nehmen
      *
      * DFS = DEPTH FIRST SEARCH 
-     * 
-     *
-     * 
      */
   
     /*                         **A
@@ -58,40 +65,86 @@ public class PathFinding
     *  true, true, ture, flase
     */
     
+    
+    static int toMove = 0;
+
+
+    private static bool isBacktracking = false;
+    private static Vector2 FuturePlayerPos = Vector2.Zero;
+    
+    private static bool checkFirstSide = true;
+    
     public static void Walk(Socket socket, string status)
     {
-        //Setup.SendData(socket, "ENTER");
-        //23 uhr 
-        Random rnd = new Random();
         Vector2 savePlayerPos = GetPlayerPos(status);
 
-        int toMove = rnd.Next(0, 4);
+
+        if (backTrack.Count != 0 &&!isFirstMove && isBacktracking )
+        {
+            Console.WriteLine("me Is backtracking");
+            
+            toMove = backTrack.Last() ;
+            backTrack.RemoveAt(backTrack.Count -1);
+
+            
+            if (backTrack.Count != 0&& toMove == 0 || toMove == 1)
+            {
+                Console.WriteLine("LEFT RIGTH");
+                if (checkFirstSide)
+                {
+                    toMove = 2;
+                    checkFirstSide = false;
+                }
+                else
+                {
+                    toMove = 3;
+                    checkFirstSide = true;
+                    isBacktracking = false;
+                }
+            }
+            else
+            {
+                Console.WriteLine("UP DOWN");
+                if (checkFirstSide)
+                {
+                    toMove = 0;
+                    checkFirstSide = false;
+                }
+                else
+                {
+                    toMove = 1;
+                  
+                    checkFirstSide = true;
+                }
+            }
+
+        }
+      
+        if (backTrack.Count > 0 && !isBacktracking &&toMove == backTrack.Last() &&  !isFirstMove )
+        {
+            toMove = (toMove+ 1 ) % 4; // 0,1,2,3 -> 0
+        }
+        
+
+        if (isFirstMove)
+        {
+            isFirstMove = false;
+            return;
+        }
         
         switch(toMove)
         {
             case 0:
-                Setup.SendData(socket, "UP");
-                Console.WriteLine("Up");
-                XPos = 0;
-                YPos= -1;
+                MoveThePlayer(socket, "UP", 1,savePlayerPos);
                 break;
             case 1:
-                Setup.SendData(socket, "DOWN");
-                Console.WriteLine("down");
-                XPos = 0;
-                YPos = 1;
+                MoveThePlayer(socket, "DOWN", 0,savePlayerPos);
                 break;
             case 2:
-                Setup.SendData(socket, "LEFT");
-                Console.WriteLine("left");
-                XPos = 1;
-                YPos = 0;
+                MoveThePlayer(socket, "LEFT", 3,savePlayerPos);
                 break;
             case 3:
-                Setup.SendData(socket, "RIGHT");
-                Console.WriteLine("right");
-                XPos = -1;
-                YPos = 0;
+                MoveThePlayer(socket, "RIGHT", 2,savePlayerPos);
                 break;
 
             default:
@@ -99,14 +152,10 @@ public class PathFinding
                 break;
         }
 
-        if (isFirstMove)
+        if (savePlayerPos.X < 0|| savePlayerPos.Y < 0|| savePlayerPos.X > 512 || savePlayerPos.Y > 512)
         {
-            isFirstMove = false;
-            return;
-        }
-
-        if (savePlayerPos.X == -1 || savePlayerPos.Y == -1 || savePlayerPos.X < 512 || savePlayerPos.Y < 512)
-        {
+            
+            Console.WriteLine($"owo you are throwen out : X : {savePlayerPos.X}\n{savePlayerPos.Y}");
             //reverse the curr dir
             return;
         }
@@ -120,18 +169,73 @@ public class PathFinding
              *  true, true, ture, flase
              */
 
-            map[(int)savePlayerPos.X, (int)savePlayerPos.Y] = 1;
-            Console.WriteLine("im sorry" + map +"test");
+            hasBeenVisitet[(int)savePlayerPos.X, (int)savePlayerPos.Y] = true;
+            toMove = 0;
+            Console.WriteLine("im sorry" + hasBeenVisitet +"test");
+            isBacktracking = false;
+
         }
         else
         {
-            Console.WriteLine(savePlayerPos);
-            map[(int)savePlayerPos.X , (int)savePlayerPos.Y ] = -1;
+            
+            toMove = (toMove+ 1 ) % 4; // 0,1,2,3 -> 0
+
+            if (toMove == 0)
+            {
+                isBacktracking = true;
+            }
+            
+            Console.WriteLine($"the move dir: {toMove}");
+            hasBeenVisitet[(int)savePlayerPos.X, (int)savePlayerPos.Y + YPos] = true;
+            //move.RemoveAt(move.Count - 1);
+            backTrack.RemoveAt(backTrack.Count - 1);
+            
         }
 
     }
     
+    /*
+     *T
+     *WW
+     *  WW WWW WW
+     *WW        W
+     *  XWWWWWWWWW
+     *
+     *
+     * 
+     */
+
     
+    static void MoveThePlayer(Socket socket, string directionString, int backTrackInt, Vector2 PlayerPos)
+    {
+
+        int lookUpInt = 0;
+        switch (directionString)
+        {
+            case "UP":
+                FuturePlayerPos.X = PlayerPos.X;
+                FuturePlayerPos.Y = PlayerPos.Y -1;                
+                break;
+            case "DOWN":
+                FuturePlayerPos.X = PlayerPos.X;
+                FuturePlayerPos.Y = PlayerPos.Y +1;
+                break;
+            case "LEFT":
+                FuturePlayerPos.X = PlayerPos.X -1;
+                FuturePlayerPos.Y = PlayerPos.Y;
+                break;
+            case "RIGHT":
+                FuturePlayerPos.X = PlayerPos.X +1;
+                FuturePlayerPos.Y = PlayerPos.Y;
+                break;
+        }
+        
+        Setup.SendData(socket, directionString);
+        
+        //move.Add(0);
+        backTrack.Add(backTrackInt);
+        Console.WriteLine(directionString);
+    }
 
     static Vector2 GetPlayerPos(string map)
     {

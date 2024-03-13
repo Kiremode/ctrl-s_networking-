@@ -9,8 +9,9 @@ public class Setup
     public static void MapSetup(Socket sender)
     {
         // set up the strings for the setup with out the \n it didnt work
-        string width = "WIDTH 500";
-        string height  = "HEIGHT 500";
+        //TODO THIS NEEDS TO BE CHANGED BACK TO 512X512
+        string width = "WIDTH 32";
+        string height  = "HEIGHT 32";
         string depth = "DEPTH 1";
         string start = "START";
         string print = "Print";
@@ -47,10 +48,8 @@ public class Setup
         int byteRecord = sender.Receive(bytes);
         var recData = Encoding.ASCII.GetString(bytes, 0, byteRecord);
         
-        Console.WriteLine("owo rec data" +recData + "asdeasdasdasd");
+        Console.WriteLine(recData);
 
-        //PathFinding.ClencingMap(recData);
-        
         return recData;
     }
     

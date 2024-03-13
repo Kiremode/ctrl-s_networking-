@@ -58,16 +58,9 @@ public static class Program
         while (true)
         {
             var map = Setup.SendMap(sender ,"PRINT");
-            //File.WriteAllText("hi.txt", map);
-            Thread.Sleep(1000);
-            //Console.WriteLine("map map " + map +" not map ");
             
-            //if can not enter tile  add unmove to array 
-            // 2 dim array  [419][490] false false  
-            // anst 0123 -1 1  -1 1
-            
-            PathFinding.Walk(sender, map);
-            Thread.Sleep(1500);
+            WallFollow.Walk(sender, map);
+            Thread.Sleep(400);
         } 
     }
     
